@@ -367,7 +367,10 @@ class Iris {
 		// @formatter:off
 		#if hscriptPos
 		catch (e:Expr.Error) {
-			Iris.error(Printer.errorToString(e, false), this.interp.posInfos());
+			var disable:Bool = false;
+			if(!isFunction && config.disableNonFunctionErrors) disable = true;
+
+			if(!disable) Iris.error(Printer.errorToString(e, false), this.interp.posInfos());
 		}
 		#end
 		catch (e:haxe.Exception) {
