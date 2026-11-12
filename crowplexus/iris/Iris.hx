@@ -228,7 +228,6 @@ class Iris {
 			config = new IrisConfig("Iris", true, true, []);
 		this.scriptCode = scriptCode;
 		this.config = IrisConfig.from(config);
-		this.config.name = fixScriptName(this.name);
 
 		parser = new Parser();
 		interp = new Interp();
@@ -268,7 +267,7 @@ class Iris {
 		if (expr == null)
 			expr = parse();
 
-		Iris.instances.set(this.name, this);
+		rename(this.name);
 		this.config.packageName = parser.packageName;
 		return interp.execute(expr);
 	}
@@ -304,6 +303,18 @@ class Iris {
 			Iris.print(v, pos);
 		}));
 		#end
+	}
+
+	public function rename(name: String): Void {
+		var previousName = this.name;
+
+		if (previousName != "" && Iris.instances.exists(previousName)) {
+			Iris.instances.remove(previousName);
+		}
+
+		this.config.name = fixScriptName(name);
+
+		Iris.instances.set(this.name, this);
 	}
 
 	/**
