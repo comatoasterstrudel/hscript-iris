@@ -372,7 +372,11 @@ class Iris {
 		#end
 		catch (e:haxe.Exception) {
 			var pos = isFunction ? this.interp.posInfos() : Iris.getDefaultPos(this.name);
-			Iris.error(Std.string(e), pos);
+			
+			var disable:Bool = false;
+			if(!isFunction && config.disableNonFunctionErrors) disable = true;
+
+			if(!disable) Iris.error(Std.string(e), pos);
 		}
 		// @formatter:on
 		return null;
