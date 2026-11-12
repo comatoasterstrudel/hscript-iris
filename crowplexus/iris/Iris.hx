@@ -354,9 +354,8 @@ class Iris {
 
 		// fun-ny
 		var ny: Dynamic = interp.variables.get(fun); // function signature
-		var isFunction: Bool = false;
+		var isFunction: Bool = ny != null && Reflect.isFunction(ny);
 		try {
-			isFunction = ny != null && Reflect.isFunction(ny);
 			if (!isFunction)
 				throw 'Tried to call a non-function, for "$fun"';
 			// throw "Variable not found or not callable, for \"" + fun + "\"";
