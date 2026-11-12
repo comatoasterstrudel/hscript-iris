@@ -354,10 +354,11 @@ class Iris {
 
 		// fun-ny
 		var ny: Dynamic = interp.variables.get(fun); // function signature
-		var isFunction: Bool = ny != null && Reflect.isFunction(ny);
+		var isFunction: Bool = false;
 		try {
+			isFunction = ny != null && Reflect.isFunction(ny);
 			if (!isFunction)
-				throw 'Tried to call a non-function, for "$fun"';
+				return null;
 			// throw "Variable not found or not callable, for \"" + fun + "\"";
 
 			final ret = Reflect.callMethod(null, ny, args);
@@ -366,19 +367,13 @@ class Iris {
 		// @formatter:off
 		#if hscriptPos
 		catch (e:Expr.Error) {
-			var disable:Bool = false;
-			if(!isFunction && config.disableNonFunctionErrors) disable = true;
-
-			if(!disable) Iris.error(Printer.errorToString(e, false), this.interp.posInfos());
+			Iris.error(Printer.errorToString(e, false), this.interp.posInfos());
 		}
 		#end
 		catch (e:haxe.Exception) {
 			var pos = isFunction ? this.interp.posInfos() : Iris.getDefaultPos(this.name);
 			
-			var disable:Bool = false;
-			if(!isFunction && config.disableNonFunctionErrors) disable = true;
-
-			if(!disable) Iris.error(Std.string(e), pos);
+			Iris.error(Std.string(e), pos);
 		}
 		// @formatter:on
 		return null;
